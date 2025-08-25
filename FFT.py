@@ -22,8 +22,7 @@ from utils.new_analysis import analyze_classification
 
 def generate_psd_feature(X_train, epoch_duration, samplerate):
     psd_feature_all_epochs = []
-    for X_sample in X_train: #X_sample is a 2D array of shape (n_channels, n_samples), that is (19, 1024)
-        # read every channel in X_sample.
+    for X_sample in X_train: 
         psd_feature_multi_channel = []
         for ch in range(X_sample.shape[0]):
             uni_ch = X_sample[ch,:]
@@ -32,8 +31,6 @@ def generate_psd_feature(X_train, epoch_duration, samplerate):
             # SFT.k_max = epoch_duration*samplerate        
             Sx = SFT.stft(uni_ch)#(513, 2)
             
-            # t_lo, t_hi = SFT.extent(samplerate*epoch_duration)[:2] 
-            # print("t_lo: ", t_lo, "t_hi: ", t_hi)
             psd_values = Sx[:, 0]#(513,2)
 
             if samplerate == 128:
@@ -46,9 +43,8 @@ def generate_psd_feature(X_train, epoch_duration, samplerate):
                 psd6 = psd_values[30:40]
                 psd7 = psd_values[40:60]
                 psd_feature_per_channel = [psd1, psd2, psd3, psd4, psd5, psd6, psd7]
-                # psd 1-7 is array with different length, so we need to concatenate them into one array
                 psd_feature_per_channel = np.concatenate(psd_feature_per_channel, axis=0)
-                #vertically append psd_feature_per_channel to psd_feature_multi_channel
+
                 psd_feature_multi_channel = psd_feature_per_channel if len(psd_feature_multi_channel) == 0 else np.concatenate((psd_feature_multi_channel, psd_feature_per_channel))
                 # print("psd_feature_multi_channel.shape: ", psd_feature_multi_channel.shape)
 
@@ -68,8 +64,7 @@ def main():
     os.makedirs(config['model_dir'], exist_ok=True)
     os.makedirs(config['result_dir'], exist_ok=True)
 
-    # train_epochs, test_epochs = load_dataset(config)
-    # load data
+
     setup_mne_for_processing(verbose=config.get('mne_verbose', False))
 
     print("\n=== Preprocess Pipeline with Balanced Epochs ===")
@@ -108,7 +103,6 @@ def main():
         test_epochs = create_balanced_epochs(test_events, config)
 
         X_train, y_train = load_epoch_data(train_epochs, config, split_name='train', split_counter=split_counter, cv=True)
-        # print("X_train.shape: ", X_train.shape) #(5651, 19, 1024)
         epoch_duration = config.get('epoch_duration')
         samplerate = config.get('sample_rate')
         psd_feature_all_epochs = generate_psd_feature(X_train, epoch_duration, samplerate)
@@ -125,9 +119,7 @@ def main():
         with open(model_path, 'wb') as f:
             joblib.dump(model, f)
         print(f"Model saved to: {model_path}")
-    
-        # save model config to the same directory
-        # TODO: we need configuration, number of epochs, performance(terminal output).
+
         config_path = os.path.join(config['model_dir'], f"{model_name}_config.yaml")
         with open(config_path, 'w') as f:
             yaml.dump(config, f)

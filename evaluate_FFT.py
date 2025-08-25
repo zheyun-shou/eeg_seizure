@@ -59,20 +59,15 @@ from timescoring.annotations import Annotation
 from timescoring import scoring, visualization
 from timescoring.scoring import SampleScoring, EventScoring
 
-# log_path = 'temp_eval.txt'
-# output_capture = OutputCapture(log_path, also_console=True)
-# sys.stdout = StdoutCapture(output_capture)
-# sys.stderr = StderrCapture(output_capture)
 
 
 def evaluate_recording_FFT(edf_path, tsv_path, model_path, threshold, epoch_duration, downsample=2.0, epoch_overlap=0, plot=False, ss_path=None):
 
     model = joblib.load(model_path)
     raw_data = read_raw_edf(edf_path, preload=True)
-    # desired_channels = raw_data.ch_names[:19]
-    # raw_data.pick_channels(desired_channels, verbose=False)
+
     total_duration = raw_data._last_time
-    fs = raw_data.info["sfreq"] / downsample # final sampling freq after downsample
+    fs = raw_data.info["sfreq"] / downsample 
 
 
     df_tsv = pd.read_csv(tsv_path, sep='\t')
@@ -103,10 +98,6 @@ def evaluate_recording_FFT(edf_path, tsv_path, model_path, threshold, epoch_dura
         del segments, X_test
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-        # y_pred = model.predict(X_test)
-        # predictions = model.predict_proba(X_test)
-        # yp = (predictions[:, 1] > threshold).astype(int) # threshold 
-        # y_pred = model.label_encoder.inverse_transform(yp)
         y_pred = model.predict(psd_feature_test)
         
         hyp_events = []
@@ -203,10 +194,7 @@ if __name__ == "__main__":
             test_subjects = all_subjects[test_index]
             print(f"Train subjects ids for split {split_counter}: {train_subjects}, train labels: {all_labels[train_index]}")
             print(f"Test subjects ids for split {split_counter}: {test_subjects}, test labels: {all_labels[test_index]}")
-        # train_seizure_subjects, test_seizure_subjects = train_test_split(seizure_subjects, test_size=1-config['split_ratio'], random_state=split_seed)
-        # train_bckg_subjects, test_bckg_subjects = train_test_split(bckg_subjects, test_size=1-config['split_ratio'], random_state=split_seed)
-        # train_subjects = train_seizure_subjects + train_bckg_subjects
-        # test_subjects = test_seizure_subjects + test_bckg_subjects
+
             train_subject_idx = train_subjects
             test_subject_idx = test_subjects
         
@@ -240,11 +228,6 @@ if __name__ == "__main__":
         
         start_model_time = time.time()
         
-        # model prediction on test set
-        # predictions = model.predict_proba(X_test)
-        # yp = (predictions[:, 1] > threshold).astype(int) # threshold = 0.5
-        
-        # y_pred = model.label_encoder.inverse_transform(yp)
         psd_feature_test = generate_psd_feature(X_test, epoch_duration, samplerate)
         y_pred = model.predict(psd_feature_test)
         
@@ -378,9 +361,7 @@ if __name__ == "__main__":
     print(f"Model evaluation took: {end_model_time - start_model_time:.2f} seconds")
     print(f"Number of bckg recordings in test set: {bckg_counter}")
     print(f"Number of sz recordings in test set: {seiz_counter}")
-    # logging.shutdown()
-    # os.rename('temp_eval_4.txt', log_path)
-        
+
         
         
     

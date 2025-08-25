@@ -57,12 +57,6 @@ from timescoring.annotations import Annotation
 from timescoring import scoring, visualization
 from timescoring.scoring import SampleScoring, EventScoring
 
-# log_path = 'temp_eval.txt'
-# output_capture = OutputCapture(log_path, also_console=True)
-# sys.stdout = StdoutCapture(output_capture)
-# sys.stderr = StderrCapture(output_capture)
-
-
 def evaluate_recording(edf_path, tsv_path, model_path, threshold, epoch_duration, downsample=2.0, epoch_overlap=0, plot=False, ss_path=None):
 
     model = joblib.load(model_path)
@@ -72,9 +66,6 @@ def evaluate_recording(edf_path, tsv_path, model_path, threshold, epoch_duration
     # handle case inconsistency
     raw_data.rename_channels(lambda ch_name: ch_name.upper())
 
-    # channels_to_drop = ["T5-AVG", "FZ-AVG", "CZ-AVG", "PZ-AVG", "FP2-AVG", "F4-AVG", "F8-AVG", "F7-AVG"]
-    # channels_to_pick = list(set(raw_data.ch_names) - set(channels_to_drop))
-    # raw_data.pick(picks=channels_to_pick)
 
     total_duration = raw_data._last_time
     fs = raw_data.info["sfreq"] / downsample # final sampling freq after downsample
@@ -89,7 +80,7 @@ def evaluate_recording(edf_path, tsv_path, model_path, threshold, epoch_duration
         end_time = int(row['onset'] + row['duration'])
         ref_events.append((start_time, end_time))
 
-    n_samples = int(total_duration * fs)#?
+    n_samples = int(total_duration * fs)
 
     ref = Annotation(ref_events, fs, n_samples)
 
@@ -104,14 +95,9 @@ def evaluate_recording(edf_path, tsv_path, model_path, threshold, epoch_duration
         y_test = np.concatenate([s["label"] for s in segments]).astype(int)
         time_start_test = np.concatenate([s["time_start"] for s in segments])
         time_end_test = np.concatenate([s["time_end"] for s in segments])
-        #X_test = X_test[:, np.newaxis, :]
+
         del segments
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-        # y_pred = model.predict(X_test)
-        # predictions = model.predict_proba(X_test)
-        # yp = (predictions[:, 1] > threshold).astype(int) # threshold 
-        # y_pred = model.label_encoder.inverse_transform(yp)
         y_pred = model.predict(X_test)
         
         hyp_events = []
@@ -199,8 +185,6 @@ if __name__ == "__main__":
         split_counter = 0
         for train_index, test_index in kf.split(all_subjects, all_labels):
             split_counter += 1
-            if split_counter != 1:
-                continue
             train_subjects = all_subjects[train_index]
             test_subjects = all_subjects[test_index]
             print(f"Train subjects ids for split {split_counter}: {train_subjects}, train labels: {all_labels[train_index]}")
@@ -237,19 +221,13 @@ if __name__ == "__main__":
                 print(f"Model loaded from: {model_path}")
         
         start_model_time = time.time()
-        
-        # model prediction on test set
-        # predictions = model.predict_proba(X_test)
-        # yp = (predictions[:, 1] > threshold).astype(int) # threshold = 0.5
-        
-        # y_pred = model.label_encoder.inverse_transform(yp)
         y_pred = model.predict(X_test)
         
         f1, precision, recall, accuracy, conf_mat, conf_mat_norm = analyze_classification(y_pred, y_test)
         
         end_model_time = time.time()
     
-    if dataset == "test": #sub-203_ses-01_task-szMonitoring_run-01_events
+    if dataset == "test":
         data_size = 1
         seizure_epochs, non_seizure_epochs, bckg_epochs = [], [], [],
 
@@ -375,8 +353,7 @@ if __name__ == "__main__":
     print(f"Model evaluation took: {end_model_time - start_model_time:.2f} seconds")
     print(f"Number of bckg recordings in test set: {bckg_counter}")
     print(f"Number of sz recordings in test set: {seiz_counter}")
-    # logging.shutdown()
-    # os.rename('temp_eval_4.txt', log_path)
+
         
         
         

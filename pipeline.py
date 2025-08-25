@@ -185,8 +185,6 @@ if __name__ == "__main__":
     split_counter = 0
     for train_index, test_index in kf.split(all_subjects, all_labels):
         split_counter += 1
-        if split_counter == 1:
-            continue
         train_subjects = all_subjects[train_index]
         test_subjects = all_subjects[test_index]
         print(f"Train subjects ids for split {split_counter}: {train_subjects}, train labels: {all_labels[train_index]}")

@@ -344,11 +344,6 @@ def load_epoch_data(epochs, config, split_name, split_counter, cv=False):
     assert split_name in ['train', 'test'], "Split name must be either 'train' or 'test'"
 
     if config.get('load_preprocessed_data', False) and not cv:
-        # 1. scan the preprocessed_dir for config files
-        # 2. load the config file
-        # 3. check the following terms if they are the same as the config:
-        # 4. if all terms are the same, load the preprocessed data
-        # 5. if any term is different, load the epochs and preprocess the data
 
         matching_config = find_matching_config(config, config['preprocessed_dir'])
         if matching_config is not None:
