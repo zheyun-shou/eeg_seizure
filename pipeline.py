@@ -20,7 +20,6 @@ import sys
 import logging
 from utils.log import OutputCapture, StdoutCapture, StderrCapture
 
-# Import existing utilities
 from utils.catch22_feature_analysis import Catch22CumlClassifier
 from utils.new_dataloader import (
     load_epoch_data,

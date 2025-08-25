@@ -74,14 +74,6 @@ class Catch22CumlClassifier(_DelegatedClassifier):
         for i in tqdm.tqdm(range(0, len(X), self.batch_size), desc=f"Transform with batch={self.batch_size}"):
             batch = X[i:i+self.batch_size]
             batch_features.append(self.transformer_.transform(batch))
-
-        # from concurrent.futures import ProcessPoolExecutor, as_completed
-        # with ProcessPoolExecutor(max_workers=self.n_jobs) as executor:
-        #     # use tqdm to show progress
-        #     tasks = [executor.submit(self.transformer_.transform, X[i:i+self.batch_size]) for i in range(0, len(X), self.batch_size)]
-        #     pbar = tqdm.tqdm(as_completed(tasks), total=len(future_to_recording), desc="", ncols=100)
-        #     for res in pbar:
-        #         batch_features.append(res.result())
         
         return np.concatenate(batch_features, axis=0)
 

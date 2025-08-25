@@ -108,7 +108,7 @@ def evaluate_recording(edf_path, tsv_path, model_path, threshold, epoch_duration
 
         hyp = Annotation(hyp_events, fs, n_samples)
         fig, ax = plt.subplots(2,1, figsize=(8, 4.8))
-        # Compute sample-based scoring
+
         sample_scores = SampleScoring(ref, hyp)
         figSamples = visualization.plotSampleScoring(ref, hyp, ax=ax[0])
         
