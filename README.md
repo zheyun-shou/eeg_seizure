@@ -30,7 +30,7 @@ python -m pip install -U timescoring
 cd eeg_seizure
 ```
 
-When using EEGNet, it is recommended to create a new conda environment, then follow the [instructions](https://github.com/aliasvishnu/EEGNet).
+When using EEGNet, it is recommended to create a new conda environment, then follow the [instructions](https://github.com/vlawhern/arl-eegmodels).
 
 When using catch22, follow the installing [instructions](https://github.com/DynamicsAndNeuralSystems/catch22).
 
@@ -65,6 +65,7 @@ This work builds on and extends the following projects:
 - catch22: [publication](https://link.springer.com/article/10.1007/s10618-019-00647-x), [repo](https://github.com/DynamicsAndNeuralSystems/catch22).
 - EEGNet: [publication](https://arxiv.org/abs/1611.08024), [repo](https://github.com/vlawhern/arl-eegmodels).
 - [the Seizure detection challenge (2025)](https://epilepsybenchmarks.com/challenge-description/) and [timescoring](https://github.com/esl-epfl/timescoring) framework provided by the challenge.
+
 
 
 
