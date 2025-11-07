@@ -63,7 +63,8 @@ This work builds on and extends the following projects:
 - Detach Ensemble:[publication](https://dl.acm.org/doi/10.1007/978-3-031-77066-1_6), [repo](https://github.com/gon-uri/detach_rocket).
 - STFT-based feature transform: [publication](https://ieeexplore.ieee.org/document/4801967).
 - catch22: [publication](https://link.springer.com/article/10.1007/s10618-019-00647-x), [repo](https://github.com/DynamicsAndNeuralSystems/catch22).
-- EEGNet: [publication](https://arxiv.org/abs/1611.08024), [repo](https://github.com/aliasvishnu/EEGNet).
+- EEGNet: [publication](https://arxiv.org/abs/1611.08024), [repo](https://github.com/vlawhern/arl-eegmodels).
 - [the Seizure detection challenge (2025)](https://epilepsybenchmarks.com/challenge-description/) and [timescoring](https://github.com/esl-epfl/timescoring) framework provided by the challenge.
+
 
 
